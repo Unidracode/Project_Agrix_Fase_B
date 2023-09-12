@@ -4,10 +4,12 @@ import com.betrybe.agrix.dto.FertilizerDto;
 import com.betrybe.agrix.models.entities.Fertilizer;
 import com.betrybe.agrix.services.FertilizerService;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +51,18 @@ public class FertilizerController {
     List<FertilizerDto> fertilizerDto = fertilizers.stream().map(fertilizer
         -> new FertilizerDto(fertilizer.getId(), fertilizer.getName(), fertilizer.getBrand(),
         fertilizer.getComposition())).toList();
+    return ResponseEntity.ok(fertilizerDto);
+  }
+
+  /**
+   * comment.
+   */
+
+  @GetMapping("{id}")
+  public ResponseEntity<FertilizerDto> getFertilizerById(@PathVariable Long id) {
+    Fertilizer fertilizer = fertilizerService.getFertilizerById(id);
+    FertilizerDto fertilizerDto = new FertilizerDto(fertilizer.getId(), fertilizer.getName(),
+        fertilizer.getBrand(), fertilizer.getComposition());
     return ResponseEntity.ok(fertilizerDto);
   }
 }
