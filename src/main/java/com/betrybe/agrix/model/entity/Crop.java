@@ -5,8 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * comment.
@@ -32,6 +36,9 @@ public class Crop {
   @Column(name = "harvest_date")
   private LocalDate harvestDate;
 
+  @ManyToMany(mappedBy = "crops")
+  private List<Fertilizer> fertilizers;
+
   public Crop() {}
 
   /**
@@ -43,12 +50,14 @@ public class Crop {
       Double plantedArea,
       Long farmId,
       LocalDate plantedDate,
-      LocalDate harvestDate) {
+      LocalDate harvestDate,
+      List<Fertilizer> fertilizers) {
     this.name = name;
     this.plantedArea = plantedArea;
     this.farmId = farmId;
     this.plantedDate = plantedDate;
     this.harvestDate = harvestDate;
+    this.fertilizers = fertilizers;
   }
 
   public Long getId() {
@@ -97,5 +106,13 @@ public class Crop {
 
   public void setHarvestDate(LocalDate harvestDate) {
     this.harvestDate = harvestDate;
+  }
+
+  public List<Fertilizer> getFertilizers() {
+    return fertilizers;
+  }
+
+  public void setFertilizers(List<Fertilizer> fertilizers) {
+    this.fertilizers = fertilizers;
   }
 }

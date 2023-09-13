@@ -7,7 +7,30 @@ import com.betrybe.agrix.models.entities.Fertilizer;
  */
 
 public record FertilizerDto(Long id, String name, String brand, String composition) {
+
+  /**
+   * comment.
+   */
+
+  public static FertilizerDto fromFertilizer(Fertilizer fertilizer) {
+    return new FertilizerDto(
+        fertilizer.getId(),
+        fertilizer.getName(),
+        fertilizer.getBrand(),
+        fertilizer.getComposition()
+    );
+  }
+
+  /**
+   * comment.
+   */
+
   public Fertilizer toFertilizer() {
-    return new Fertilizer(id, name, brand, composition);
+    Fertilizer fertilizer = new Fertilizer();
+
+    fertilizer.setName(this.name);
+    fertilizer.setBrand(this.brand);
+    fertilizer.setComposition(this.composition);
+    return fertilizer;
   }
 }

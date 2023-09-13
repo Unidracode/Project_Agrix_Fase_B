@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,11 +56,24 @@ public class CropController {
     throw new NotFoundException("Plantação não encontrada!");
   }
 
+  /**
+   * comment.
+   */
   @GetMapping("/search")
-  public ResponseEntity<List<Crop>> searchCrops(
+  public ResponseEntity<List<CropDto>> searchCrops(
       @RequestParam(name = "start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
       @RequestParam(name = "end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
     List<Crop> crops = cropService.searchCrops(start, end);
-    return ResponseEntity.status(HttpStatus.OK).body(crops);
+    List<CropDto> cropsDto = crops.stream().map(CropDto::fromEntity).toList();
+    return ResponseEntity.status(HttpStatus.OK).body(cropsDto);
+  }
+
+  @PostMapping("/{cropId}/fertilizers/{fertilizerId}")
+  public ResponseEntity<String> addFertilizer(
+      @PathVariable Long cropId,
+      @PathVariable Long fertilizerId
+  ) {
+    String result = this.cropService.addFertilizers(cropId, fertilizerId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(result);
   }
 }

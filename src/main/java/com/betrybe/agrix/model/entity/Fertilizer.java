@@ -4,7 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Table;
+import java.util.List;
+import org.hibernate.annotations.ManyToAny;
 
 /**
  * comment.
@@ -20,15 +24,24 @@ public class Fertilizer {
   private String brand;
   private String composition;
 
+  @ManyToAny
+  @JoinTable(
+      name = "crop_fertilizer",
+      joinColumns = @JoinColumn(name = "fertilizer_id"),
+      inverseJoinColumns = @JoinColumn(name = "crop_id")
+  )
+  private List<Crop> crops;
+
   /**
    * comment.
    */
 
-  public Fertilizer(Long id, String name, String brand, String composition) {
+  public Fertilizer(Long id, String name, String brand, String composition, List<Crop> crops) {
     this.id = id;
     this.name = name;
     this.brand = brand;
     this.composition = composition;
+    this.crops = crops;
   }
 
   public Fertilizer() {}
@@ -63,5 +76,13 @@ public class Fertilizer {
 
   public void setComposition(String composition) {
     this.composition = composition;
+  }
+
+  public List<Crop> getCrops() {
+    return crops;
+  }
+
+  public void setCrops(List<Crop> crops) {
+    this.crops = crops;
   }
 }
