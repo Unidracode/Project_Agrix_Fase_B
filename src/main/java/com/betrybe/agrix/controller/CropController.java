@@ -1,8 +1,10 @@
 package com.betrybe.agrix.controllers;
 
 import com.betrybe.agrix.dto.CropDto;
+import com.betrybe.agrix.dto.FertilizerDto;
 import com.betrybe.agrix.exceptions.NotFoundException;
 import com.betrybe.agrix.models.entities.Crop;
+import com.betrybe.agrix.models.entities.Fertilizer;
 import com.betrybe.agrix.service.CropService;
 import java.time.LocalDate;
 import java.util.List;
@@ -71,9 +73,20 @@ public class CropController {
   @PostMapping("/{cropId}/fertilizers/{fertilizerId}")
   public ResponseEntity<String> addFertilizer(
       @PathVariable Long cropId,
-      @PathVariable Long fertilizerId
-  ) {
+      @PathVariable Long fertilizerId) {
     String result = this.cropService.addFertilizers(cropId, fertilizerId);
     return ResponseEntity.status(HttpStatus.CREATED).body(result);
+  }
+
+  /**
+   * comment.
+   */
+
+  @GetMapping("/{cropId}/fertilizers")
+  public ResponseEntity<List<FertilizerDto>> getCropFertilizers(@PathVariable Long cropId) {
+    List<Fertilizer> fertilizers = this.cropService.getCropFertilizers(cropId);
+    List<FertilizerDto> fertilizersDto = fertilizers.stream()
+        .map(FertilizerDto::fromFertilizer).toList();
+    return ResponseEntity.ok(fertilizersDto);
   }
 }

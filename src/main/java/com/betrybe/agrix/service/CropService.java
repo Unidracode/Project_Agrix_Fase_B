@@ -57,18 +57,29 @@ public class CropService {
     if (cropOptional.isEmpty()) {
       throw new NotFoundException("Plantação não encontrada!");
     }
-
     Optional<Fertilizer> fertilizerOptional = this.fertilizerRepository.findById(fertilizerId);
     if (fertilizerOptional.isEmpty()) {
       throw new NotFoundException("Fertilizante não encontrado!");
     }
-
     Crop crop = cropOptional.get();
     Fertilizer fertilizer = fertilizerOptional.get();
-
     crop.getFertilizers().add(fertilizer);
     fertilizer.getCrops().add(crop);
-
+    this.fertilizerRepository.save(fertilizer);
     return "Fertilizante e plantação associados com sucesso!";
+  }
+
+  /**
+   * comment.
+   */
+
+  public List<Fertilizer> getCropFertilizers(Long id) {
+    Optional<Crop> cropOptional = this.cropRepository.findById(id);
+    if (cropOptional.isEmpty()) {
+      throw new NotFoundException("Plantação não encontrada!");
+    }
+    Crop crop = cropOptional.get();
+    List<Fertilizer> fertilizers = crop.getFertilizers();
+    return fertilizers;
   }
 }
